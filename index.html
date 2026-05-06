@@ -13,42 +13,47 @@ body {
   color: #0f172a;
 }
 
+/* HEADER */
 header {
-  background: #60a5fa;
+  background: linear-gradient(90deg, #60a5fa, #93c5fd);
   color: white;
-  padding: 18px;
+  padding: 22px;
   text-align: center;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
 }
 
+/* SEARCH */
 .container {
   padding: 20px;
 }
 
-/* Search */
 .search {
   width: 100%;
-  padding: 10px;
-  border-radius: 20px;
+  padding: 12px;
+  border-radius: 25px;
   border: 1px solid #dbeafe;
   background: #f0f9ff;
   margin-bottom: 15px;
+  outline: none;
 }
 
-/* Categories */
+/* CATEGORIES */
 .categories {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  overflow-x: auto;
 }
 
 .cat {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 20px;
   background: #e0f2fe;
   cursor: pointer;
   font-size: 13px;
+  white-space: nowrap;
+  transition: 0.2s;
 }
 
 .cat.active {
@@ -56,32 +61,59 @@ header {
   color: white;
 }
 
-/* Cards */
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+/* CARD */
 .card {
   background: #f8fbff;
   border: 1px solid #dbeafe;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 15px;
-  margin-bottom: 15px;
   cursor: pointer;
+  position: relative;
   transition: 0.2s;
 }
 
 .card:hover {
+  transform: translateY(-3px);
   background: #e0f2fe;
 }
 
 .title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
 }
 
 .desc {
-  font-size: 14px;
+  font-size: 13px;
   color: #475569;
+  margin-top: 5px;
 }
 
-/* Modal */
+/* HEART */
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* META */
+.meta {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -94,11 +126,11 @@ header {
 
 .modal-content {
   background: white;
-  margin: 10% auto;
+  margin: 8% auto;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   width: 90%;
-  max-width: 500px;
+  max-width: 520px;
 }
 
 .close {
@@ -110,7 +142,7 @@ header {
 .video {
   height: 180px;
   background: #e0f2fe;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,77 +157,94 @@ header {
 
 <div class="container">
 
-<input class="search" placeholder="Search tutorials..." onkeyup="render()" />
+<input class="search" placeholder="Search tutorials..." oninput="render()" />
 
-<div class="categories">
-  <div class="cat active" onclick="setCategory('All', this)">All</div>
-  <div class="cat" onclick="setCategory('Phone', this)">Phone</div>
-  <div class="cat" onclick="setCategory('Laptop', this)">Laptop</div>
-</div>
+<div class="categories" id="cats"></div>
 
-<div id="list"></div>
+<div class="grid" id="list"></div>
 
 </div>
 
-<!-- Modal -->
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
     <div class="video">▶ Video Placeholder</div>
-    <h2 id="modalTitle"></h2>
-    <p id="modalDesc"></p>
+    <h2 id="mTitle"></h2>
+    <p id="mDesc"></p>
   </div>
 </div>
 
 <script>
 const data = [
-  { title: "Fix Phone Screen", desc: "Replace a cracked screen easily.", cat: "Phone" },
-  { title: "Clean Charging Port", desc: "Fix charging issues quickly.", cat: "Phone" },
-  { title: "Replace Laptop Battery", desc: "Swap your battery safely.", cat: "Laptop" }
+  { id: 1, title: "Fix Phone Screen", desc: "Replace cracked screen easily.", cat: "Phone", views: 120 },
+  { id: 2, title: "Clean Charging Port", desc: "Fix charging issues fast.", cat: "Phone", views: 80 },
+  { id: 3, title: "Replace Laptop Battery", desc: "Swap battery safely.", cat: "Laptop", views: 200 },
+  { id: 4, title: "Boost WiFi Speed", desc: "Improve your internet instantly.", cat: "Tech", views: 150 }
 ];
 
-let currentCategory = "All";
+let favs = new Set();
+let currentCat = "All";
 
-function render() {
-  const list = document.getElementById("list");
-  const search = document.querySelector(".search").value.toLowerCase();
+const cats = ["All", ...new Set(data.map(d => d.cat))];
 
-  list.innerHTML = "";
-
-  data.forEach(item => {
-    if (
-      (currentCategory === "All" || item.cat === currentCategory) &&
-      item.title.toLowerCase().includes(search)
-    ) {
-      list.innerHTML += `
-        <div class="card" onclick="openModal('${item.title}', '${item.desc}')">
-          <div class="title">${item.title}</div>
-          <div class="desc">${item.desc}</div>
-        </div>
-      `;
-    }
-  });
+function loadCats() {
+  const el = document.getElementById("cats");
+  el.innerHTML = cats.map(c =>
+    `<div class="cat ${c===currentCat?'active':''}" onclick="setCat('${c}')">${c}</div>`
+  ).join('');
 }
 
-function setCategory(cat, el) {
-  currentCategory = cat;
-
-  document.querySelectorAll(".cat").forEach(c => c.classList.remove("active"));
-  el.classList.add("active");
-
+function setCat(c) {
+  currentCat = c;
+  loadCats();
   render();
 }
 
-function openModal(title, desc) {
+function toggleFav(id) {
+  favs.has(id) ? favs.delete(id) : favs.add(id);
+  render();
+}
+
+function openModal(t,d) {
   document.getElementById("modal").style.display = "block";
-  document.getElementById("modalTitle").innerText = title;
-  document.getElementById("modalDesc").innerText = desc;
+  document.getElementById("mTitle").innerText = t;
+  document.getElementById("mDesc").innerText = d;
 }
 
 function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
+function render() {
+  const q = document.querySelector(".search").value.toLowerCase();
+  const list = document.getElementById("list");
+
+  const filtered = data.filter(d =>
+    (currentCat==="All" || d.cat===currentCat) &&
+    d.title.toLowerCase().includes(q)
+  );
+
+  list.innerHTML = filtered.map(d => `
+    <div class="card">
+      <div class="heart" onclick="toggleFav(${d.id})">
+        ${favs.has(d.id) ? "❤️" : "🤍"}
+      </div>
+
+      <div onclick="openModal('${d.title}','${d.desc}')">
+        <div class="title">${d.title}</div>
+        <div class="desc">${d.desc}</div>
+
+        <div class="meta">
+          <span>${d.cat}</span>
+          <span>${d.views} views</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+loadCats();
 render();
 </script>
 
