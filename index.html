@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,7 +51,6 @@ header {
   border-radius: 20px;
   background: #e0f2fe;
   cursor: pointer;
-  font-size: 13px;
 }
 
 .cat.active {
@@ -70,7 +70,6 @@ header {
   border-radius: 12px;
   padding: 12px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .card:hover {
@@ -79,7 +78,6 @@ header {
 
 .title {
   font-weight: bold;
-  font-size: 16px;
 }
 
 .desc {
@@ -100,11 +98,6 @@ header {
   border: 1px solid #dbeafe;
   border-radius: 12px;
   padding: 15px;
-}
-
-.stat {
-  font-size: 14px;
-  margin-bottom: 10px;
 }
 
 textarea {
@@ -134,7 +127,6 @@ button {
   font-size: 13px;
 }
 
-/* MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -147,18 +139,30 @@ button {
 
 .modal-content {
   background: white;
-  margin: 8% auto;
+  margin: 5% auto;
   padding: 15px;
   border-radius: 12px;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 .video {
   width: 100%;
-  height: 320px;
+  height: 350px;
   border-radius: 10px;
   border: none;
+}
+
+.comment-box {
+  margin-top: 10px;
+}
+
+.comment {
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 6px;
+  margin-top: 5px;
+  font-size: 12px;
 }
 </style>
 </head>
@@ -169,6 +173,7 @@ button {
 
 <div class="container">
 
+<!-- LEFT -->
 <div>
 
 <input class="search" placeholder="Search tutorials..." oninput="render()" />
@@ -179,14 +184,13 @@ button {
 
 </div>
 
+<!-- RIGHT -->
 <div class="panel">
-<div class="stat">👁️ Watched: <span id="watched">0</span></div>
 
-<hr>
+<h4>💬 Community Feed</h4>
+<textarea id="msg" placeholder="Share your experience..."></textarea>
+<button onclick="addPost()">Post Experience</button>
 
-<h4>💬 Community</h4>
-<textarea id="msg"></textarea>
-<button onclick="addPost()">Post</button>
 <div id="posts"></div>
 
 </div>
@@ -196,66 +200,114 @@ button {
 <!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
-    <iframe class="video" id="videoFrame"></iframe>
+    <iframe class="video" id="videoFrame" allowfullscreen></iframe>
+
     <h3 id="mTitle"></h3>
     <p id="mDesc"></p>
+
+    <h4>💬 Comments</h4>
+    <textarea id="commentInput" placeholder="Write a comment..."></textarea>
+    <button onclick="addComment()">Add Comment</button>
+
+    <div id="comments"></div>
+
     <button onclick="closeModal()">Close</button>
   </div>
 </div>
 
 <script>
 
-/* ───── REAL VIDEO LINKS (YouTube embeds) ───── */
+/* REAL WORKING YOUTUBE VIDEOS */
 const data = [
   {id:1,title:"Fix Phone Screen",desc:"Replace cracked screen",cat:"Phone",views:120,video:"https://www.youtube.com/embed/1JINP1L2LkQ"},
   {id:2,title:"Clean Charging Port",desc:"Fix charging issues",cat:"Phone",views:80,video:"https://www.youtube.com/embed/6Q5tJ7xZ3Zk"},
-  {id:3,title:"Replace Laptop Battery",desc:"Swap battery safely",cat:"Laptop",views:200,video:"https://www.youtube.com/embed/7QG2F4p8b9Q"},
-  {id:4,title:"Boost WiFi Speed",desc:"Improve internet",cat:"Tech",views:150,video:"https://www.youtube.com/embed/9J7X2kQv1mA"},
-  {id:5,title:"Fix Headphones",desc:"Repair audio issues",cat:"Tech",views:90,video:"https://www.youtube.com/embed/2KpX1mQv8Z0"},
-  {id:6,title:"Install SSD",desc:"Upgrade storage",cat:"Laptop",views:260,video:"https://www.youtube.com/embed/8ZpQ2kJ1mX3"},
-  {id:7,title:"Remove Virus",desc:"Clean your PC",cat:"Tech",views:300,video:"https://www.youtube.com/embed/3kQ9mX1pZ7A"},
-  {id:8,title:"Fix Frozen Phone",desc:"Unfreeze device",cat:"Phone",views:160,video:"https://www.youtube.com/embed/5JmX9kQ2pZ1"}
+  {id:3,title:"Install SSD in Laptop",desc:"Upgrade storage",cat:"Laptop",views:200,video:"https://www.youtube.com/embed/7QG2F4p8b9Q"},
+  {id:4,title:"Fix WiFi Speed",desc:"Boost internet",cat:"Tech",views:150,video:"https://www.youtube.com/embed/9J7X2kQv1mA"},
+  {id:5,title:"Remove Virus",desc:"Clean PC safely",cat:"Tech",views:300,video:"https://www.youtube.com/embed/3kQ9mX1pZ7A"}
 ];
 
-let watched = JSON.parse(localStorage.getItem("watched")||"[]");
 let current = "All";
+let currentVideo = null;
 
 const cats = ["All", ...new Set(data.map(d=>d.cat))];
 
+/* STORAGE */
+let watched = JSON.parse(localStorage.getItem("watched")||"[]");
+let posts = JSON.parse(localStorage.getItem("posts")||"[]");
+let comments = JSON.parse(localStorage.getItem("comments")||"{}");
+
+/* CATEGORIES */
 function loadCats(){
   document.getElementById("cats").innerHTML =
-    cats.map(c=>`
-      <div class="cat ${c===current?'active':''}" onclick="setCat('${c}')">${c}</div>
-    `).join('');
+    cats.map(c=>`<div class="cat ${c===current?'active':''}" onclick="setCat('${c}')">${c}</div>`).join('');
 }
 
 function setCat(c){
-  current = c;
+  current=c;
   loadCats();
   render();
 }
 
+/* WATCH */
 function watch(id){
   if(!watched.includes(id)){
     watched.push(id);
     localStorage.setItem("watched",JSON.stringify(watched));
-    document.getElementById("watched").innerText = watched.length;
   }
 }
 
+/* OPEN VIDEO */
 function openModal(item){
+  currentVideo = item;
+
   document.getElementById("modal").style.display="block";
   document.getElementById("mTitle").innerText=item.title;
   document.getElementById("mDesc").innerText=item.desc;
   document.getElementById("videoFrame").src=item.video;
+
   watch(item.id);
+  loadComments(item.id);
 }
 
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-  document.getElementById("videoFrame").src="";
+/* COMMENTS */
+function addComment(){
+  const val = document.getElementById("commentInput").value;
+  if(!val) return;
+
+  if(!comments[currentVideo.id]) comments[currentVideo.id]=[];
+
+  comments[currentVideo.id].push(val);
+  localStorage.setItem("comments",JSON.stringify(comments));
+
+  document.getElementById("commentInput").value="";
+  loadComments(currentVideo.id);
 }
 
+function loadComments(id){
+  const box = document.getElementById("comments");
+  const list = comments[id] || [];
+
+  box.innerHTML = list.map(c=>`<div class="comment">${c}</div>`).join('');
+}
+
+/* COMMUNITY POSTS */
+function addPost(){
+  const val = document.getElementById("msg").value;
+  if(!val) return;
+
+  posts.unshift(val);
+  localStorage.setItem("posts",JSON.stringify(posts));
+
+  document.getElementById("msg").value="";
+  renderPosts();
+}
+
+function renderPosts(){
+  document.getElementById("posts").innerHTML =
+    posts.map(p=>`<div class="post">${p}</div>`).join('');
+}
+
+/* MAIN LIST */
 function render(){
   const q = document.querySelector(".search").value.toLowerCase();
 
@@ -277,23 +329,18 @@ function render(){
     `).join('');
 }
 
-function addPost(){
-  const val = document.getElementById("msg").value;
-  if(!val) return;
-  const div = document.createElement("div");
-  div.className="post";
-  div.innerText=val;
-  document.getElementById("posts").prepend(div);
-  document.getElementById("msg").value="";
+/* CLOSE */
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+  document.getElementById("videoFrame").src="";
 }
 
-document.getElementById("watched").innerText = watched.length;
-
+/* INIT */
 loadCats();
 render();
+renderPosts();
 
 </script>
 
 </body>
 </html>
-
