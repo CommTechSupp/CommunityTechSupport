@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tutorials</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #0f172a;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DIY Tutorials</title>
 
-```
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #0f172a;
+}
+
 header {
-  background-color: #60a5fa;
+  background: #60a5fa;
   color: white;
-  padding: 20px;
+  padding: 18px;
   text-align: center;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
 }
 
@@ -26,102 +26,178 @@ header {
   padding: 20px;
 }
 
+/* Search */
 .search {
   width: 100%;
   padding: 10px;
   border-radius: 20px;
   border: 1px solid #dbeafe;
-  background-color: #f0f9ff;
-  margin-bottom: 20px;
-  font-size: 14px;
+  background: #f0f9ff;
+  margin-bottom: 15px;
 }
 
+/* Categories */
+.categories {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cat {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #e0f2fe;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.cat.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Cards */
 .card {
-  background-color: #f8fbff;
+  background: #f8fbff;
   border: 1px solid #dbeafe;
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
+  cursor: pointer;
   transition: 0.2s;
 }
 
 .card:hover {
-  background-color: #e0f2fe;
+  background: #e0f2fe;
 }
 
 .title {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 5px;
 }
 
 .desc {
   font-size: 14px;
   color: #475569;
-  margin-bottom: 10px;
 }
 
-.button {
-  display: inline-block;
-  padding: 8px 12px;
-  background-color: #3b82f6;
-  color: white;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 13px;
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
 }
 
-.button:hover {
-  background-color: #2563eb;
+.modal-content {
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
 }
-```
 
-  </style>
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.video {
+  height: 180px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+</style>
 </head>
+
 <body>
 
 <header>DIY Tutorials</header>
 
 <div class="container">
-  <input class="search" placeholder="Search tutorials..." onkeyup="searchTutorials(this.value)" />
 
-  <div id="tutorialList">
+<input class="search" placeholder="Search tutorials..." onkeyup="render()" />
 
-```
-<div class="card">
-  <div class="title">Fix a Cracked Phone Screen</div>
-  <div class="desc">Step-by-step guide to replacing your phone screen.</div>
-  <a href="#" class="button">View Tutorial</a>
+<div class="categories">
+  <div class="cat active" onclick="setCategory('All', this)">All</div>
+  <div class="cat" onclick="setCategory('Phone', this)">Phone</div>
+  <div class="cat" onclick="setCategory('Laptop', this)">Laptop</div>
 </div>
 
-<div class="card">
-  <div class="title">Replace Laptop Battery</div>
-  <div class="desc">Learn how to safely swap out your battery.</div>
-  <a href="#" class="button">View Tutorial</a>
+<div id="list"></div>
+
 </div>
 
-<div class="card">
-  <div class="title">Clean Charging Port</div>
-  <div class="desc">Simple way to fix charging issues.</div>
-  <a href="#" class="button">View Tutorial</a>
-</div>
-```
-
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
+    <div class="video">▶ Video Placeholder</div>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
   </div>
 </div>
 
 <script>
-  function searchTutorials(query) {
-    const cards = document.querySelectorAll(".card");
-    query = query.toLowerCase();
+const data = [
+  { title: "Fix Phone Screen", desc: "Replace a cracked screen easily.", cat: "Phone" },
+  { title: "Clean Charging Port", desc: "Fix charging issues quickly.", cat: "Phone" },
+  { title: "Replace Laptop Battery", desc: "Swap your battery safely.", cat: "Laptop" }
+];
 
-    cards.forEach(card => {
-      const text = card.innerText.toLowerCase();
-      card.style.display = text.includes(query) ? "block" : "none";
-    });
-  }
+let currentCategory = "All";
+
+function render() {
+  const list = document.getElementById("list");
+  const search = document.querySelector(".search").value.toLowerCase();
+
+  list.innerHTML = "";
+
+  data.forEach(item => {
+    if (
+      (currentCategory === "All" || item.cat === currentCategory) &&
+      item.title.toLowerCase().includes(search)
+    ) {
+      list.innerHTML += `
+        <div class="card" onclick="openModal('${item.title}', '${item.desc}')">
+          <div class="title">${item.title}</div>
+          <div class="desc">${item.desc}</div>
+        </div>
+      `;
+    }
+  });
+}
+
+function setCategory(cat, el) {
+  currentCategory = cat;
+
+  document.querySelectorAll(".cat").forEach(c => c.classList.remove("active"));
+  el.classList.add("active");
+
+  render();
+}
+
+function openModal(title, desc) {
+  document.getElementById("modal").style.display = "block";
+  document.getElementById("modalTitle").innerText = title;
+  document.getElementById("modalDesc").innerText = desc;
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+render();
 </script>
 
 </body>
 </html>
-
