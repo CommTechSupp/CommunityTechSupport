@@ -13,7 +13,6 @@ body {
   color: #0f172a;
 }
 
-/* HEADER */
 header {
   background: linear-gradient(90deg, #60a5fa, #93c5fd);
   color: white;
@@ -23,7 +22,6 @@ header {
   font-weight: bold;
 }
 
-/* LAYOUT */
 .container {
   padding: 20px;
   display: grid;
@@ -39,6 +37,7 @@ header {
   border: 1px solid #dbeafe;
   background: #f0f9ff;
   margin-bottom: 15px;
+  outline: none;
 }
 
 .categories {
@@ -76,10 +75,12 @@ header {
   padding: 12px;
   cursor: pointer;
   position: relative;
+  transition: 0.2s;
 }
 
 .card:hover {
   background: #e0f2fe;
+  transform: translateY(-2px);
 }
 
 .title {
@@ -90,6 +91,7 @@ header {
 .desc {
   font-size: 13px;
   color: #475569;
+  margin-top: 4px;
 }
 
 .meta {
@@ -98,14 +100,6 @@ header {
   color: #64748b;
   display: flex;
   justify-content: space-between;
-}
-
-/* HEART */
-.heart {
-  position: absolute;
-  right: 10px;
-  top: 8px;
-  cursor: pointer;
 }
 
 /* RIGHT PANEL */
@@ -129,6 +123,7 @@ textarea {
   border-radius: 10px;
   border: 1px solid #dbeafe;
   padding: 10px;
+  resize: none;
 }
 
 button {
@@ -178,7 +173,7 @@ button {
 
 <div class="container">
 
-<!-- LEFT SIDE -->
+<!-- LEFT -->
 <div>
 
 <input class="search" placeholder="Search tutorials..." oninput="render()" />
@@ -189,15 +184,14 @@ button {
 
 </div>
 
-<!-- RIGHT PANEL -->
+<!-- RIGHT -->
 <div class="panel">
 
 <div class="stat">👁️ Tutorials Watched: <span id="watched">0</span></div>
 
 <hr>
 
-<h4>💬 Community Posts</h4>
-
+<h4>💬 Community</h4>
 <textarea id="msg" placeholder="Share your experience..."></textarea>
 <button onclick="addPost()">Post</button>
 
@@ -217,18 +211,8 @@ button {
 </div>
 
 <script>
-const data = [
-  {id:1,title:"Fix Phone Screen",desc:"Replace cracked screen",cat:"Phone",views:120},
-  {id:2,title:"Clean Charging Port",desc:"Fix charging issues",cat:"Phone",views:80},
-  {id:3,title:"Replace Laptop Battery",desc:"Swap battery safely",cat:"Laptop",views:200},
-  {id:4,title:"Boost WiFi Speed",desc:"Improve internet",cat:"Tech",views:150},
-  {id:5,title:"Fix Headphones",desc:"Repair broken audio",cat:"Tech",views:90},
-  {id:6,title:"Replace Keyboard Keys",desc:"Fix missing keys",cat:"Laptop",views:60},
-  {id:7,title:"Remove Virus",desc:"Clean your PC",cat:"Tech",views:300},
-  {id:8,title:"Fix Camera Lens",desc:"Repair blurry camera",cat:"Phone",views:110},
-  {id:9,title:"Replace Laptop Screen",desc:"Full screen swap",cat:"Laptop",views:220},
-  {id:10,title:"Speed Up Phone",desc:"Make phone faster",cat:"Phone",views:180}
-];
+
+/* ───── 25 TUTORIALS ───── */
 const data = [
   {id:1,title:"Fix Phone Screen",desc:"Replace cracked screen",cat:"Phone",views:120},
   {id:2,title:"Clean Charging Port",desc:"Fix charging issues",cat:"Phone",views:80},
@@ -241,31 +225,34 @@ const data = [
   {id:9,title:"Replace Laptop Screen",desc:"Full screen swap",cat:"Laptop",views:220},
   {id:10,title:"Speed Up Phone",desc:"Make phone faster",cat:"Phone",views:180},
 
-  // ───── 15 NEW TUTORIALS ─────
-  {id:11,title:"Fix Overheating Phone",desc:"Stop your phone from heating up",cat:"Phone",views:140},
-  {id:12,title:"Replace Broken Charger Cable",desc:"Repair or replace damaged cables",cat:"Phone",views:95},
-  {id:13,title:"Install SSD in Laptop",desc:"Upgrade to faster storage",cat:"Laptop",views:260},
-  {id:14,title:"Fix Blue Screen Error",desc:"Solve Windows crash issues",cat:"Tech",views:310},
-  {id:15,title:"Clean Laptop Fans",desc:"Remove dust and improve cooling",cat:"Laptop",views:175},
-  {id:16,title:"Recover Deleted Files",desc:"Restore lost data easily",cat:"Tech",views:240},
-  {id:17,title:"Fix Weak WiFi Signal",desc:"Improve router range",cat:"Tech",views:130},
-  {id:18,title:"Replace Phone Battery",desc:"Install a new battery safely",cat:"Phone",views:210},
-  {id:19,title:"Fix Frozen Screen",desc:"Unfreeze unresponsive devices",cat:"Phone",views:160},
-  {id:20,title:"Upgrade RAM in Laptop",desc:"Boost performance with more memory",cat:"Laptop",views:275},
-  {id:21,title:"Fix Audio Jack",desc:"Repair headphone port issues",cat:"Phone",views:85},
-  {id:22,title:"Reset Forgotten Password",desc:"Recover access to your device",cat:"Tech",views:190},
-  {id:23,title:"Fix Slow Boot Time",desc:"Speed up startup process",cat:"Laptop",views:220},
-  {id:24,title:"Repair Broken Screen Hinges",desc:"Fix laptop hinge damage",cat:"Laptop",views:140},
-  {id:25,title:"Clear Cache for Speed",desc:"Improve device performance quickly",cat:"Tech",views:170}
+  {id:11,title:"Fix Overheating Phone",desc:"Stop heating issues",cat:"Phone",views:140},
+  {id:12,title:"Replace Charger Cable",desc:"Fix damaged cable",cat:"Phone",views:95},
+  {id:13,title:"Install SSD",desc:"Upgrade storage",cat:"Laptop",views:260},
+  {id:14,title:"Fix Blue Screen",desc:"Windows crash fix",cat:"Tech",views:310},
+  {id:15,title:"Clean Laptop Fans",desc:"Remove dust buildup",cat:"Laptop",views:175},
+  {id:16,title:"Recover Files",desc:"Restore deleted data",cat:"Tech",views:240},
+  {id:17,title:"Fix WiFi Signal",desc:"Improve router range",cat:"Tech",views:130},
+  {id:18,title:"Replace Battery",desc:"Install new phone battery",cat:"Phone",views:210},
+  {id:19,title:"Fix Frozen Screen",desc:"Unfreeze device",cat:"Phone",views:160},
+  {id:20,title:"Upgrade RAM",desc:"Boost performance",cat:"Laptop",views:275},
+  {id:21,title:"Fix Audio Jack",desc:"Repair headphone port",cat:"Phone",views:85},
+  {id:22,title:"Reset Password",desc:"Recover access",cat:"Tech",views:190},
+  {id:23,title:"Fix Slow Boot",desc:"Speed up startup",cat:"Laptop",views:220},
+  {id:24,title:"Repair Hinges",desc:"Fix laptop hinge",cat:"Laptop",views:140},
+  {id:25,title:"Clear Cache",desc:"Improve speed",cat:"Tech",views:170}
 ];
-let watched = JSON.parse(localStorage.getItem("watched")||"[]");
 
-const cats = ["All", ...new Set(data.map(d=>d.cat))];
+let watched = JSON.parse(localStorage.getItem("watched")||"[]");
 let current = "All";
 
+const cats = ["All", ...new Set(data.map(d=>d.cat))];
+
+/* CATEGORIES */
 function loadCats(){
   document.getElementById("cats").innerHTML =
-    cats.map(c=>`<div class="cat ${c===current?'active':''}" onclick="setCat('${c}')">${c}</div>`).join('');
+    cats.map(c=>`
+      <div class="cat ${c===current?'active':''}" onclick="setCat('${c}')">${c}</div>
+    `).join('');
 }
 
 function setCat(c){
@@ -274,6 +261,7 @@ function setCat(c){
   render();
 }
 
+/* WATCH TRACKER */
 function watch(id){
   if(!watched.includes(id)){
     watched.push(id);
@@ -282,6 +270,7 @@ function watch(id){
   }
 }
 
+/* MODAL */
 function openModal(t,d,id){
   document.getElementById("modal").style.display="block";
   document.getElementById("mTitle").innerText=t;
@@ -293,6 +282,7 @@ function closeModal(){
   document.getElementById("modal").style.display="none";
 }
 
+/* RENDER */
 function render(){
   const q = document.querySelector(".search").value.toLowerCase();
 
@@ -303,12 +293,12 @@ function render(){
 
   document.getElementById("list").innerHTML =
     list.map(d=>`
-      <div class="card">
-        <div class="heart">🤍</div>
-        <div onclick="openModal('${d.title}','${d.desc}',${d.id})">
-          <div class="title">${d.title}</div>
-          <div class="desc">${d.desc}</div>
-          <div class="meta"><span>${d.cat}</span><span>${d.views} views</span></div>
+      <div class="card" onclick="openModal('${d.title}','${d.desc}',${d.id})">
+        <div class="title">${d.title}</div>
+        <div class="desc">${d.desc}</div>
+        <div class="meta">
+          <span>${d.cat}</span>
+          <span>${d.views} views</span>
         </div>
       </div>
     `).join('');
@@ -321,7 +311,7 @@ function addPost(){
 
   const div = document.createElement("div");
   div.className="post";
-  div.innerText = val;
+  div.innerText=val;
 
   document.getElementById("posts").prepend(div);
   document.getElementById("msg").value="";
@@ -331,7 +321,9 @@ document.getElementById("watched").innerText = watched.length;
 
 loadCats();
 render();
+
 </script>
 
 </body>
 </html>
+
