@@ -229,7 +229,35 @@ const data = [
   {id:9,title:"Replace Laptop Screen",desc:"Full screen swap",cat:"Laptop",views:220},
   {id:10,title:"Speed Up Phone",desc:"Make phone faster",cat:"Phone",views:180}
 ];
+const data = [
+  {id:1,title:"Fix Phone Screen",desc:"Replace cracked screen",cat:"Phone",views:120},
+  {id:2,title:"Clean Charging Port",desc:"Fix charging issues",cat:"Phone",views:80},
+  {id:3,title:"Replace Laptop Battery",desc:"Swap battery safely",cat:"Laptop",views:200},
+  {id:4,title:"Boost WiFi Speed",desc:"Improve internet",cat:"Tech",views:150},
+  {id:5,title:"Fix Headphones",desc:"Repair broken audio",cat:"Tech",views:90},
+  {id:6,title:"Replace Keyboard Keys",desc:"Fix missing keys",cat:"Laptop",views:60},
+  {id:7,title:"Remove Virus",desc:"Clean your PC",cat:"Tech",views:300},
+  {id:8,title:"Fix Camera Lens",desc:"Repair blurry camera",cat:"Phone",views:110},
+  {id:9,title:"Replace Laptop Screen",desc:"Full screen swap",cat:"Laptop",views:220},
+  {id:10,title:"Speed Up Phone",desc:"Make phone faster",cat:"Phone",views:180},
 
+  // ───── 15 NEW TUTORIALS ─────
+  {id:11,title:"Fix Overheating Phone",desc:"Stop your phone from heating up",cat:"Phone",views:140},
+  {id:12,title:"Replace Broken Charger Cable",desc:"Repair or replace damaged cables",cat:"Phone",views:95},
+  {id:13,title:"Install SSD in Laptop",desc:"Upgrade to faster storage",cat:"Laptop",views:260},
+  {id:14,title:"Fix Blue Screen Error",desc:"Solve Windows crash issues",cat:"Tech",views:310},
+  {id:15,title:"Clean Laptop Fans",desc:"Remove dust and improve cooling",cat:"Laptop",views:175},
+  {id:16,title:"Recover Deleted Files",desc:"Restore lost data easily",cat:"Tech",views:240},
+  {id:17,title:"Fix Weak WiFi Signal",desc:"Improve router range",cat:"Tech",views:130},
+  {id:18,title:"Replace Phone Battery",desc:"Install a new battery safely",cat:"Phone",views:210},
+  {id:19,title:"Fix Frozen Screen",desc:"Unfreeze unresponsive devices",cat:"Phone",views:160},
+  {id:20,title:"Upgrade RAM in Laptop",desc:"Boost performance with more memory",cat:"Laptop",views:275},
+  {id:21,title:"Fix Audio Jack",desc:"Repair headphone port issues",cat:"Phone",views:85},
+  {id:22,title:"Reset Forgotten Password",desc:"Recover access to your device",cat:"Tech",views:190},
+  {id:23,title:"Fix Slow Boot Time",desc:"Speed up startup process",cat:"Laptop",views:220},
+  {id:24,title:"Repair Broken Screen Hinges",desc:"Fix laptop hinge damage",cat:"Laptop",views:140},
+  {id:25,title:"Clear Cache for Speed",desc:"Improve device performance quickly",cat:"Tech",views:170}
+];
 let watched = JSON.parse(localStorage.getItem("watched")||"[]");
 
 const cats = ["All", ...new Set(data.map(d=>d.cat))];
