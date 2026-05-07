@@ -215,3 +215,8 @@ const styles = StyleSheet.create({
   recentTitle: { fontSize: 13, fontWeight: FONT.semibold, color: COLORS.text },
   recentDur: { fontSize: 12, color: COLORS.textSub },
 });
+
+import { useTheme } from '../theme/ThemeContext';
+export default function DashboardScreen({ navigation }) {
+  const { theme, toggleTheme } = useTheme();
+  const COLORS = theme.colors;
