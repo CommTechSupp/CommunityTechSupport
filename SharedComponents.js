@@ -241,3 +241,18 @@ export function Loader() {
 export default function DashboardScreen({ navigation }) {
   const { theme, toggleTheme } = useTheme();
   const COLORS = theme.colors;
+const createStyles = (COLORS) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.bg,
+    },
+
+    greeting: {
+      fontSize: 22,
+      fontWeight: FONT.black,
+      color: COLORS.text,
+    },
+
+    // all other styles...
+  });const styles = createStyles(COLORS);
