@@ -256,3 +256,10 @@ const createStyles = (COLORS) =>
 
     // all other styles...
   });const styles = createStyles(COLORS);
+<TouchableOpacity onPress={toggleTheme}>
+  <Ionicons
+    name={theme.mode === 'light' ? 'moon-outline' : 'sunny-outline'}
+    size={24}
+    color={COLORS.text}
+  />
+</TouchableOpacity>
