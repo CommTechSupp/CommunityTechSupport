@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,335 +6,618 @@
 <title>DIY Tutorials Hub</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #0f172a;
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-header {
-  background: linear-gradient(90deg, #60a5fa, #93c5fd);
-  color: white;
-  padding: 20px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
+body{
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+  color:#0f172a;
+  min-height:100vh;
 }
 
-.container {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
+/* HEADER */
+
+header{
+  width:100%;
+  padding:25px;
+  font-size:32px;
+  font-weight:bold;
+  text-align:center;
+  color:white;
+  background:linear-gradient(90deg,#2563eb,#60a5fa);
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
-.search {
-  width: 100%;
-  padding: 12px;
-  border-radius: 20px;
-  border: 1px solid #dbeafe;
-  background: #f0f9ff;
-  margin-bottom: 15px;
+/* MAIN LAYOUT */
+
+.container{
+  width:100%;
+  min-height:calc(100vh - 90px);
+  display:grid;
+  grid-template-columns:3fr 1fr;
+  gap:20px;
+  padding:20px;
 }
 
-.categories {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
+/* LEFT SIDE */
+
+.left{
+  width:100%;
 }
 
-.cat {
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: #e0f2fe;
-  cursor: pointer;
+/* SEARCH */
+
+.search{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  background:white;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+  margin-bottom:20px;
 }
 
-.cat.active {
-  background: #3b82f6;
-  color: white;
+/* CATEGORIES */
+
+.categories{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
+.cat{
+  padding:10px 18px;
+  border-radius:30px;
+  background:white;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:bold;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 
-.card {
-  background: #f8fbff;
-  border: 1px solid #dbeafe;
-  border-radius: 12px;
-  padding: 12px;
-  cursor: pointer;
+.cat:hover{
+  transform:translateY(-2px);
 }
 
-.card:hover {
-  background: #e0f2fe;
+.cat.active{
+  background:#2563eb;
+  color:white;
 }
 
-.title {
-  font-weight: bold;
+/* VIDEO GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
 }
 
-.desc {
-  font-size: 13px;
-  color: #475569;
+/* CARD */
+
+.card{
+  background:white;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
-.meta {
-  font-size: 12px;
-  margin-top: 8px;
-  color: #64748b;
-  display: flex;
-  justify-content: space-between;
+.card:hover{
+  transform:translateY(-5px);
 }
 
-.panel {
-  background: #f8fbff;
-  border: 1px solid #dbeafe;
-  border-radius: 12px;
-  padding: 15px;
+.thumb{
+  width:100%;
+  height:200px;
+  object-fit:cover;
 }
 
-textarea {
-  width: 100%;
-  height: 70px;
-  border-radius: 10px;
-  border: 1px solid #dbeafe;
-  padding: 10px;
+.card-content{
+  padding:16px;
 }
 
-button {
-  margin-top: 8px;
-  width: 100%;
-  padding: 8px;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
+.title{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:8px;
 }
 
-.post {
-  background: #e0f2fe;
-  padding: 8px;
-  border-radius: 8px;
-  margin-top: 8px;
-  font-size: 13px;
+.desc{
+  color:#475569;
+  font-size:14px;
+  margin-bottom:15px;
 }
 
-.modal {
-  display: none;
-  position: fixed;
+.meta{
+  display:flex;
+  justify-content:space-between;
+  color:#64748b;
+  font-size:13px;
+}
+
+/* COMMUNITY PANEL */
+
+.panel{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+  height:fit-content;
+  position:sticky;
+  top:20px;
+}
+
+.panel h3{
+  margin-bottom:15px;
+}
+
+textarea{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:12px;
+  resize:none;
+  background:#f1f5f9;
+  margin-top:10px;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  background:#2563eb;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+
+.post{
+  background:#eff6ff;
+  padding:12px;
+  border-radius:12px;
+  margin-top:12px;
+  font-size:14px;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  background: rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.7);
+  z-index:1000;
+  overflow:auto;
 }
 
-.modal-content {
-  background: white;
-  margin: 5% auto;
-  padding: 15px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 700px;
+.modal-content{
+  width:95%;
+  max-width:1100px;
+  margin:40px auto;
+  background:white;
+  border-radius:20px;
+  padding:20px;
 }
 
-.video {
-  width: 100%;
-  height: 350px;
-  border-radius: 10px;
-  border: none;
+.video{
+  width:100%;
+  height:600px;
+  border:none;
+  border-radius:14px;
+  margin-bottom:20px;
 }
 
-.comment-box {
-  margin-top: 10px;
+.comment{
+  background:#f1f5f9;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
 }
 
-.comment {
-  background: #f1f5f9;
-  padding: 6px;
-  border-radius: 6px;
-  margin-top: 5px;
-  font-size: 12px;
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .container{
+    grid-template-columns:1fr;
+  }
+
+  .video{
+    height:300px;
+  }
+
+  header{
+    font-size:24px;
+  }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<header>DIY Tutorials Hub</header>
+<header>
+  DIY Tutorials Hub
+</header>
 
 <div class="container">
 
-<!-- LEFT -->
-<div>
+  <!-- LEFT -->
 
-<input class="search" placeholder="Search tutorials..." oninput="render()" />
+  <div class="left">
 
-<div class="categories" id="cats"></div>
+    <input
+      class="search"
+      placeholder="Search tutorials..."
+      oninput="render()"
+    />
 
-<div class="grid" id="list"></div>
+    <div class="categories" id="cats"></div>
 
-</div>
+    <div class="grid" id="list"></div>
 
-<!-- RIGHT -->
-<div class="panel">
+  </div>
 
-<h4>💬 Community Feed</h4>
-<textarea id="msg" placeholder="Share your experience..."></textarea>
-<button onclick="addPost()">Post Experience</button>
+  <!-- RIGHT -->
 
-<div id="posts"></div>
+  <div class="panel">
 
-</div>
+    <h3>💬 Community Feed</h3>
+
+    <textarea
+      id="msg"
+      rows="4"
+      placeholder="Share your experience..."
+    ></textarea>
+
+    <button onclick="addPost()">
+      Post Experience
+    </button>
+
+    <div id="posts"></div>
+
+  </div>
 
 </div>
 
 <!-- MODAL -->
+
 <div class="modal" id="modal">
+
   <div class="modal-content">
-    <iframe class="video" id="videoFrame" allowfullscreen></iframe>
 
-    <h3 id="mTitle"></h3>
-    <p id="mDesc"></p>
+    <iframe
+      class="video"
+      id="videoFrame"
+      allowfullscreen
+    ></iframe>
 
-    <h4>💬 Comments</h4>
-    <textarea id="commentInput" placeholder="Write a comment..."></textarea>
-    <button onclick="addComment()">Add Comment</button>
+    <h2 id="mTitle"></h2>
+
+    <p id="mDesc" style="margin-top:10px;margin-bottom:20px;"></p>
+
+    <h3>💬 Comments</h3>
+
+    <textarea
+      id="commentInput"
+      rows="3"
+      placeholder="Write a comment..."
+    ></textarea>
+
+    <button onclick="addComment()">
+      Add Comment
+    </button>
 
     <div id="comments"></div>
 
-    <button onclick="closeModal()">Close</button>
+    <button onclick="closeModal()" style="background:#ef4444;">
+      Close
+    </button>
+
   </div>
+
 </div>
 
 <script>
 
-/* REAL WORKING YOUTUBE VIDEOS */
+/* MORE WORKING VIDEOS */
+
 const data = [
-  {id:1,title:"Fix Phone Screen",desc:"Replace cracked screen",cat:"Phone",views:120,video:"https://www.youtube.com/embed/1JINP1L2LkQ"},
-  {id:2,title:"Clean Charging Port",desc:"Fix charging issues",cat:"Phone",views:80,video:"https://www.youtube.com/embed/6Q5tJ7xZ3Zk"},
-  {id:3,title:"Install SSD in Laptop",desc:"Upgrade storage",cat:"Laptop",views:200,video:"https://www.youtube.com/embed/7QG2F4p8b9Q"},
-  {id:4,title:"Fix WiFi Speed",desc:"Boost internet",cat:"Tech",views:150,video:"https://www.youtube.com/embed/9J7X2kQv1mA"},
-  {id:5,title:"Remove Virus",desc:"Clean PC safely",cat:"Tech",views:300,video:"https://www.youtube.com/embed/3kQ9mX1pZ7A"}
+
+{
+  id:1,
+  title:"Fix Phone Screen",
+  desc:"Learn how to replace a cracked smartphone screen.",
+  cat:"Phone",
+  views:1200,
+  thumb:"https://img.youtube.com/vi/6Maq5IyHSuc/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/6Maq5IyHSuc"
+},
+
+{
+  id:2,
+  title:"Clean Charging Port",
+  desc:"Fix charging issues safely.",
+  cat:"Phone",
+  views:980,
+  thumb:"https://img.youtube.com/vi/sL8Hy8FuIGc/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/sL8Hy8FuIGc"
+},
+
+{
+  id:3,
+  title:"Install SSD in Laptop",
+  desc:"Upgrade laptop storage and speed.",
+  cat:"Laptop",
+  views:2200,
+  thumb:"https://img.youtube.com/vi/5NckCxoxobE/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/5NckCxoxobE"
+},
+
+{
+  id:4,
+  title:"Fix Slow WiFi",
+  desc:"Boost internet speed and fix lag.",
+  cat:"Tech",
+  views:1600,
+  thumb:"https://img.youtube.com/vi/5QYqBJL8M0Q/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/5QYqBJL8M0Q"
+},
+
+{
+  id:5,
+  title:"Remove Virus from PC",
+  desc:"Clean malware safely from Windows.",
+  cat:"Tech",
+  views:3100,
+  thumb:"https://img.youtube.com/vi/Rf1Y5o9FogA/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/Rf1Y5o9FogA"
+},
+
+{
+  id:6,
+  title:"Build a Gaming PC",
+  desc:"Step-by-step beginner gaming PC build.",
+  cat:"PC Build",
+  views:5500,
+  thumb:"https://img.youtube.com/vi/PXaLc9AYIcg/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/PXaLc9AYIcg"
+},
+
+{
+  id:7,
+  title:"Change Car Oil",
+  desc:"DIY car oil change tutorial.",
+  cat:"Car",
+  views:4200,
+  thumb:"https://img.youtube.com/vi/O1hF25Cowv8/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/O1hF25Cowv8"
+},
+
+{
+  id:8,
+  title:"Replace Keyboard Keys",
+  desc:"Repair broken laptop keyboard keys.",
+  cat:"Laptop",
+  views:900,
+  thumb:"https://img.youtube.com/vi/Qaldz9h5w3I/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/Qaldz9h5w3I"
+},
+
+{
+  id:9,
+  title:"DIY LED Room Setup",
+  desc:"Make your room look amazing with LEDs.",
+  cat:"DIY",
+  views:8700,
+  thumb:"https://img.youtube.com/vi/JXkjjbBi6Ck/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/JXkjjbBi6Ck"
+},
+
+{
+  id:10,
+  title:"Fix Water Damaged Phone",
+  desc:"Emergency phone recovery tutorial.",
+  cat:"Phone",
+  views:6100,
+  thumb:"https://img.youtube.com/vi/HEjC0Ude8CA/hqdefault.jpg",
+  video:"https://www.youtube.com/embed/HEjC0Ude8CA"
+}
+
 ];
 
 let current = "All";
 let currentVideo = null;
 
-const cats = ["All", ...new Set(data.map(d=>d.cat))];
+const cats = ["All", ...new Set(data.map(d => d.cat))];
 
-/* STORAGE */
-let watched = JSON.parse(localStorage.getItem("watched")||"[]");
-let posts = JSON.parse(localStorage.getItem("posts")||"[]");
-let comments = JSON.parse(localStorage.getItem("comments")||"{}");
+let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+let comments = JSON.parse(localStorage.getItem("comments") || "{}");
 
-/* CATEGORIES */
+/* LOAD CATEGORIES */
+
 function loadCats(){
+
   document.getElementById("cats").innerHTML =
-    cats.map(c=>`<div class="cat ${c===current?'active':''}" onclick="setCat('${c}')">${c}</div>`).join('');
+    cats.map(c => `
+      <div
+        class="cat ${c === current ? 'active' : ''}"
+        onclick="setCat('${c}')"
+      >
+        ${c}
+      </div>
+    `).join('');
+
 }
 
 function setCat(c){
-  current=c;
+  current = c;
   loadCats();
   render();
 }
 
-/* WATCH */
-function watch(id){
-  if(!watched.includes(id)){
-    watched.push(id);
-    localStorage.setItem("watched",JSON.stringify(watched));
-  }
-}
-
 /* OPEN VIDEO */
+
 function openModal(item){
+
   currentVideo = item;
 
-  document.getElementById("modal").style.display="block";
-  document.getElementById("mTitle").innerText=item.title;
-  document.getElementById("mDesc").innerText=item.desc;
-  document.getElementById("videoFrame").src=item.video;
+  document.getElementById("modal").style.display = "block";
 
-  watch(item.id);
+  document.getElementById("mTitle").innerText = item.title;
+
+  document.getElementById("mDesc").innerText = item.desc;
+
+  document.getElementById("videoFrame").src = item.video;
+
   loadComments(item.id);
+
+}
+
+/* CLOSE */
+
+function closeModal(){
+
+  document.getElementById("modal").style.display = "none";
+
+  document.getElementById("videoFrame").src = "";
+
 }
 
 /* COMMENTS */
+
 function addComment(){
+
   const val = document.getElementById("commentInput").value;
+
   if(!val) return;
 
-  if(!comments[currentVideo.id]) comments[currentVideo.id]=[];
+  if(!comments[currentVideo.id]){
+    comments[currentVideo.id] = [];
+  }
 
   comments[currentVideo.id].push(val);
-  localStorage.setItem("comments",JSON.stringify(comments));
 
-  document.getElementById("commentInput").value="";
+  localStorage.setItem(
+    "comments",
+    JSON.stringify(comments)
+  );
+
+  document.getElementById("commentInput").value = "";
+
   loadComments(currentVideo.id);
+
 }
 
 function loadComments(id){
+
   const box = document.getElementById("comments");
+
   const list = comments[id] || [];
 
-  box.innerHTML = list.map(c=>`<div class="comment">${c}</div>`).join('');
+  box.innerHTML = list.map(c => `
+    <div class="comment">${c}</div>
+  `).join('');
+
 }
 
-/* COMMUNITY POSTS */
+/* POSTS */
+
 function addPost(){
+
   const val = document.getElementById("msg").value;
+
   if(!val) return;
 
   posts.unshift(val);
-  localStorage.setItem("posts",JSON.stringify(posts));
 
-  document.getElementById("msg").value="";
+  localStorage.setItem(
+    "posts",
+    JSON.stringify(posts)
+  );
+
+  document.getElementById("msg").value = "";
+
   renderPosts();
+
 }
 
 function renderPosts(){
+
   document.getElementById("posts").innerHTML =
-    posts.map(p=>`<div class="post">${p}</div>`).join('');
+    posts.map(p => `
+      <div class="post">${p}</div>
+    `).join('');
+
 }
 
-/* MAIN LIST */
-function render(){
-  const q = document.querySelector(".search").value.toLowerCase();
+/* MAIN RENDER */
 
-  const list = data.filter(d=>
-    (current==="All"||d.cat===current)&&
+function render(){
+
+  const q =
+    document.querySelector(".search")
+    .value
+    .toLowerCase();
+
+  const list = data.filter(d =>
+    (current === "All" || d.cat === current) &&
     d.title.toLowerCase().includes(q)
   );
 
   document.getElementById("list").innerHTML =
-    list.map(d=>`
-      <div class="card" onclick='openModal(${JSON.stringify(d)})'>
-        <div class="title">${d.title}</div>
-        <div class="desc">${d.desc}</div>
-        <div class="meta">
-          <span>${d.cat}</span>
-          <span>${d.views} views</span>
-        </div>
-      </div>
-    `).join('');
-}
+    list.map(d => `
 
-/* CLOSE */
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-  document.getElementById("videoFrame").src="";
+      <div class="card" onclick='openModal(${JSON.stringify(d)})'>
+
+        <img class="thumb" src="${d.thumb}" />
+
+        <div class="card-content">
+
+          <div class="title">
+            ${d.title}
+          </div>
+
+          <div class="desc">
+            ${d.desc}
+          </div>
+
+          <div class="meta">
+            <span>${d.cat}</span>
+            <span>${d.views} views</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join('');
+
 }
 
 /* INIT */
+
 loadCats();
 render();
 renderPosts();
