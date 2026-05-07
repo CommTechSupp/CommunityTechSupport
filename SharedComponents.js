@@ -238,3 +238,6 @@ export function Loader() {
     </View>
   );
 }
+export default function DashboardScreen({ navigation }) {
+  const { theme, toggleTheme } = useTheme();
+  const COLORS = theme.colors;
