@@ -238,3 +238,18 @@ export function Loader() {
     </View>
   );
 }
+const createStyles = (COLORS) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.bg,
+    },
+
+    greeting: {
+      fontSize: 22,
+      fontWeight: FONT.black,
+      color: COLORS.text,
+    },
+
+    // all other styles...
+  });const styles = createStyles(COLORS);
