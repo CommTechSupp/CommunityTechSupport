@@ -263,3 +263,37 @@ const createStyles = (COLORS) =>
     color={COLORS.text}
   />
 </TouchableOpacity>
+export default function DashboardScreen({ navigation }) {
+  const { theme, toggleTheme } = useTheme();
+  const COLORS = theme.colors;
+  const styles = createStyles(COLORS);
+
+  const topTechs = [...TECHNICIANS]
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3);
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.banner}>
+        <View>
+          <Text style={styles.greeting}>Good morning 👋</Text>
+          <Text style={styles.subGreeting}>
+            What needs fixing today?
+          </Text>
+        </View>
+
+        <TouchableOpacity onPress={toggleTheme}>
+          <Ionicons
+            name={
+              theme.mode === 'light'
+                ? 'moon-outline'
+                : 'sunny-outline'
+            }
+            size={24}
+            color={COLORS.text}
+          />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
