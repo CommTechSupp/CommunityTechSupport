@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ 
+<title>Repair Shops</title>
+ 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+ 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700&display=swap');
+ 
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+}
+ 
+:root{
+ --bg:#FFFFFF;
+ --surface:#F7F9FC;
+ --surface2:#EEF4FF;
+ --border:#D6E4FF;
+ 
+ --accent:#2563EB;
+ --accent2:#3B82F6;
+ --gold:#2563EB;
+ --teal:#1D4ED8;
+ 
+ --text:#0F172A;
+ --muted:#64748B;
+ --tag:#EAF2FF;
+}
+ 
+body{
+ background:var(--bg);
+ font-family:'DM Sans',sans-serif;
+ color:var(--text);
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ padding:20px;
+}
+ 
+.ti{
+ color:var(--accent);
+}
+ 
+.phone{
+ width:380px;
+ height:760px;
+ background:#fff;
+ overflow:hidden;
+ position:relative;
+ border-radius:30px;
+ border:1px solid var(--border);
+ box-shadow:0 10px 35px rgba(37,99,235,.08);
+ display:flex;
+ flex-direction:column;
+}
+ 
+.status-bar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:10px 20px 4px;
+ font-size:12px;
+ color:var(--muted);
+ flex-shrink:0;
+}
+ 
+.status-time{
+ font-weight:600;
+ font-size:13px;
+ color:var(--text);
+}
+ 
+.header{
+ padding:12px 20px 8px;
+ flex-shrink:0;
+}
+ 
+.header-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ margin-bottom:12px;
+}
+ 
+.greeting{
+ font-size:11px;
+ color:var(--muted);
+ letter-spacing:.05em;
+ text-transform:uppercase;
+}
+ 
+.title{
+ font-family:'Syne',sans-serif;
+ font-size:24px;
+ font-weight:700;
+ color:var(--text);
+ line-height:1.1;
+}
+ 
+/* --- LOCATION BADGE (interactive) --- */
+.loc-badge{
+ display:flex;
+ align-items:center;
+ gap:5px;
+ background:var(--surface2);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:5px 10px;
+ font-size:11px;
+ color:var(--accent);
+ cursor:pointer;
+ position:relative;
+ user-select:none;
+}
+ 
+.loc-badge:hover{
+ background:#dbeafe;
+}
+ 
+.loc-dropdown{
+ display:none;
+ position:absolute;
+ top:calc(100% + 6px);
+ right:0;
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:8px;
+ z-index:200;
+ box-shadow:0 8px 24px rgba(37,99,235,.12);
+ min-width:190px;
+}
+ 
+.loc-dropdown.open{
+ display:block;
+}
+ 
+.loc-option{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ padding:8px 10px;
+ border-radius:10px;
+ font-size:12px;
+ color:var(--text);
+ cursor:pointer;
+ white-space:nowrap;
+}
+ 
+.loc-option:hover{
+ background:var(--surface2);
+ color:var(--accent);
+}
+ 
+.loc-option.selected{
+ background:var(--surface2);
+ color:var(--accent);
+ font-weight:600;
+}
+ 
+/* --- end location badge --- */
+ 
+.avatar{
+ width:36px;
+ height:36px;
+ border-radius:50%;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:14px;
+ font-weight:600;
+ color:#fff;
+}
+ 
+.search-wrap{
+ padding:0 20px 10px;
+ flex-shrink:0;
+}
+ 
+.search-box{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:10px 14px;
+}
+ 
+.search-box input{
+ background:none;
+ border:none;
+ outline:none;
+ color:var(--text);
+ font-size:14px;
+ flex:1;
+ font-family:'DM Sans',sans-serif;
+}
+ 
+.search-box input::placeholder{
+ color:var(--muted);
+}
+ 
+.filter-btn{
+ background:var(--accent);
+ border:none;
+ border-radius:10px;
+ width:32px;
+ height:32px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ cursor:pointer;
+ flex-shrink:0;
+}
+ 
+.filter-btn .ti{
+ color:#fff;
+}
+ 
+/* --- COLLAPSIBLE FILTER PANEL --- */
+.filter-panel{
+ overflow:hidden;
+ max-height:0;
+ transition:max-height .28s ease;
+ flex-shrink:0;
+}
+ 
+.filter-panel.open{
+ max-height:120px;
+}
+ 
+/* --- end filter panel --- */
+ 
+.sort-row,
+.filter-row{
+ display:flex;
+ gap:8px;
+ overflow-x:auto;
+ scrollbar-width:none;
+}
+ 
+.sort-row{
+ padding:4px 20px 10px;
+}
+ 
+.filter-row{
+ padding:0 20px 12px;
+}
+ 
+.sort-row::-webkit-scrollbar,
+.filter-row::-webkit-scrollbar{
+ display:none;
+}
+ 
+.chip,
+.ftag{
+ white-space:nowrap;
+ border-radius:20px;
+ border:1px solid var(--border);
+ background:var(--surface);
+ color:var(--muted);
+ cursor:pointer;
+ transition:all .2s;
+ font-family:'DM Sans',sans-serif;
+}
+ 
+.chip{
+ font-size:12px;
+ padding:6px 14px;
+}
+ 
+.ftag{
+ font-size:11px;
+ padding:5px 12px;
+}
+ 
+.chip.active{
+ background:var(--accent);
+ border-color:var(--accent);
+ color:#fff;
+ font-weight:500;
+}
+ 
+.ftag.on{
+ background:rgba(37,99,235,.12);
+ border-color:var(--accent);
+ color:var(--accent);
+}
+ 
+.section-label{
+ padding:0 20px 8px;
+ font-size:11px;
+ color:var(--muted);
+ letter-spacing:.08em;
+ text-transform:uppercase;
+}
+ 
+/* --- SCROLLABLE CONTENT AREA --- */
+.scroll-area{
+ flex:1;
+ overflow-y:auto;
+ overflow-x:hidden;
+ -webkit-overflow-scrolling:touch;
+ scrollbar-width:thin;
+ scrollbar-color:var(--border) transparent;
+}
+ 
+.scroll-area::-webkit-scrollbar{
+ width:4px;
+}
+ 
+.scroll-area::-webkit-scrollbar-thumb{
+ background:var(--border);
+ border-radius:4px;
+}
+ 
+/* --- end scroll area --- */
+ 
+.list{
+ padding:0 16px;
+ display:flex;
+ flex-direction:column;
+ gap:10px;
+ padding-bottom:20px;
+}
+ 
+.card{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:14px 16px;
+ cursor:pointer;
+ transition:transform .15s,border-color .15s;
+ position:relative;
+ overflow:hidden;
+}
+ 
+.card:active{
+ transform:scale(.98);
+}
+ 
+.card.top{
+ border-color:rgba(37,99,235,.35);
+}
+ 
+.card::before{
+ content:'';
+ position:absolute;
+ top:0;
+ left:0;
+ right:0;
+ height:2px;
+ background:transparent;
+}
+ 
+.card.top::before{
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+ 
+.card-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ margin-bottom:8px;
+}
+ 
+.store-name{
+ font-size:15px;
+ font-weight:600;
+ color:var(--text);
+}
+ 
+.store-name a{
+ color:var(--text);
+ text-decoration:none;
+}
+ 
+.store-name a:hover{
+ color:var(--accent);
+}
+ 
+.badges{
+ display:flex;
+ flex-direction:column;
+ align-items:flex-end;
+ gap:4px;
+ margin-left:8px;
+}
+ 
+.badge-top{
+ font-size:9px;
+ font-weight:600;
+ letter-spacing:.06em;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#fff;
+ padding:3px 8px;
+ border-radius:10px;
+ text-transform:uppercase;
+}
+ 
+.badge-open{
+ font-size:10px;
+ padding:3px 9px;
+ border-radius:10px;
+ font-weight:500;
+}
+ 
+.badge-open.open{
+ background:rgba(37,99,235,.10);
+ color:var(--accent);
+}
+ 
+.badge-open.closed{
+ background:rgba(148,163,184,.15);
+ color:#64748B;
+}
+ 
+.stars-row{
+ display:flex;
+ align-items:center;
+ gap:6px;
+ margin-bottom:6px;
+}
+ 
+.stars{
+ display:flex;
+ gap:1px;
+}
+ 
+.star{
+ font-size:13px;
+}
+ 
+.star.full{
+ color:var(--accent);
+}
+ 
+.star.half{
+ color:var(--accent);
+ opacity:.5;
+}
+ 
+.star.empty{
+ color:var(--border);
+}
+ 
+.rating-num{
+ font-size:13px;
+ font-weight:600;
+ color:var(--accent);
+}
+ 
+.review-count{
+ font-size:11px;
+ color:var(--muted);
+}
+ 
+.addr-row{
+ display:flex;
+ align-items:center;
+ gap:5px;
+ margin-bottom:8px;
+}
+ 
+.addr-text{
+ font-size:11px;
+ color:var(--muted);
+}
+ 
+.dist-badge{
+ font-size:10px;
+ color:var(--accent);
+ background:rgba(37,99,235,.10);
+ padding:2px 8px;
+ border-radius:8px;
+ margin-left:auto;
+}
+ 
+.tags{
+ display:flex;
+ flex-wrap:wrap;
+ gap:5px;
+}
+ 
+.tag{
+ font-size:10px;
+ padding:3px 9px;
+ border-radius:8px;
+ background:var(--tag);
+ color:var(--accent);
+ border:1px solid var(--border);
+}
+ 
+.detail-overlay{
+ position:fixed;
+ inset:0;
+ background:rgba(15,23,42,.55);
+ display:none;
+ align-items:flex-end;
+ justify-content:center;
+ z-index:100;
+}
+ 
+.detail-sheet{
+ background:#fff;
+ border-radius:24px 24px 0 0;
+ padding:20px;
+ width:380px;
+ max-height:85vh;
+ overflow-y:auto;
+}
+ 
+.drag-handle{
+ width:36px;
+ height:4px;
+ background:var(--border);
+ border-radius:2px;
+ margin:0 auto 16px;
+}
+ 
+.detail-close{
+ position:absolute;
+ top:20px;
+ right:20px;
+ background:var(--surface2);
+ border:none;
+ border-radius:50%;
+ width:30px;
+ height:30px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ cursor:pointer;
+}
+ 
+.detail-title{
+ font-family:'Syne',sans-serif;
+ font-size:20px;
+ font-weight:700;
+ margin-bottom:4px;
+}
+ 
+.detail-addr{
+ font-size:12px;
+ color:var(--muted);
+ margin-bottom:14px;
+}
+ 
+.detail-stars{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ margin-bottom:16px;
+}
+ 
+.big-rating{
+ font-size:36px;
+ font-weight:700;
+ color:var(--accent);
+ font-family:'Syne',sans-serif;
+}
+ 
+.rating-bars{
+ flex:1;
+}
+ 
+.bar-row{
+ display:flex;
+ align-items:center;
+ gap:6px;
+ margin-bottom:3px;
+}
+ 
+.bar-label{
+ font-size:10px;
+ color:var(--muted);
+ width:8px;
+}
+ 
+.bar-track{
+ flex:1;
+ height:4px;
+ background:var(--border);
+ border-radius:2px;
+ overflow:hidden;
+}
+ 
+.bar-fill{
+ height:100%;
+ background:var(--accent);
+}
+ 
+.action-row{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px;
+}
+ 
+.act-btn{
+ flex:1;
+ padding:12px;
+ border-radius:14px;
+ border:none;
+ font-size:13px;
+ font-weight:600;
+ cursor:pointer;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+}
+ 
+.act-btn.primary{
+ background:var(--accent);
+ color:#fff;
+}
+ 
+.act-btn.primary .ti{
+ color:#fff;
+}
+ 
+.act-btn.secondary{
+ background:var(--surface2);
+ color:var(--accent);
+ border:1px solid var(--border);
+}
+ 
+.services-title,
+.reviews-title{
+ font-size:12px;
+ color:var(--muted);
+ margin-bottom:8px;
+ text-transform:uppercase;
+ letter-spacing:.06em;
+}
+ 
+.services-list{
+ display:flex;
+ flex-wrap:wrap;
+ gap:6px;
+ margin-bottom:18px;
+}
+ 
+.svc-tag{
+ font-size:12px;
+ padding:6px 12px;
+ border-radius:10px;
+ background:rgba(37,99,235,.10);
+ color:var(--accent);
+ border:1px solid rgba(37,99,235,.2);
+}
+ 
+.review-card{
+ background:var(--surface);
+ border-radius:12px;
+ padding:12px;
+ margin-bottom:8px;
+}
+ 
+.rev-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:6px;
+}
+ 
+.rev-author{
+ font-size:13px;
+ font-weight:500;
+}
+ 
+.rev-text{
+ font-size:12px;
+ color:var(--muted);
+ line-height:1.5;
+}
+ 
+.empty-state{
+ text-align:center;
+ padding:48px 24px;
+ color:var(--muted);
+}
+ 
+.empty-title{
+ font-size:16px;
+ font-weight:600;
+ color:var(--text);
+ margin-bottom:6px;
+}
+ 
+.skeleton{
+ background:var(--surface);
+ border-radius:18px;
+ padding:14px 16px;
+ margin:0 16px 10px;
+}
+ 
+.sk-line{
+ background:var(--surface2);
+ border-radius:4px;
+ height:12px;
+ margin-bottom:8px;
+ animation:shimmer 1.4s infinite;
+}
+ 
+.sk-line.short{width:60%;}
+.sk-line.mid{width:80%;}
+ 
+@keyframes shimmer{
+ 0%,100%{opacity:.4}
+ 50%{opacity:.8}
+}
+ 
+.navbar{
+ flex-shrink:0;
+ background:#fff;
+ border-top:1px solid var(--border);
+ display:flex;
+ justify-content:space-around;
+ padding:10px 0 20px;
+}
+ 
+.nav-item{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:3px;
+ font-size:9px;
+ color:var(--muted);
+ cursor:pointer;
+ padding:4px 10px;
+ border-radius:12px;
+ transition:background .15s;
+}
+ 
+.nav-item:hover{
+ background:var(--surface2);
+}
+ 
+.nav-item.active{
+ color:var(--accent);
+}
+ 
+.nav-dot{
+ width:4px;
+ height:4px;
+ border-radius:50%;
+ background:var(--accent);
+ opacity:0;
+}
+ 
+.nav-item.active .nav-dot{
+ opacity:1;
+}
+ 
+/* --- PAGE PANELS --- */
+.page-panel{
+ display:none;
+ flex-direction:column;
+ height:100%;
+ overflow-y:auto;
+ -webkit-overflow-scrolling:touch;
+ scrollbar-width:thin;
+ scrollbar-color:var(--border) transparent;
+ padding:24px 20px 20px;
+ gap:16px;
+}
+ 
+.page-panel::-webkit-scrollbar{width:4px;}
+.page-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+ 
+.page-panel.active{
+ display:flex;
+}
+ 
+.page-title{
+ font-family:'Syne',sans-serif;
+ font-size:22px;
+ font-weight:700;
+ color:var(--text);
+ margin-bottom:4px;
+}
+ 
+.page-sub{
+ font-size:13px;
+ color:var(--muted);
+ line-height:1.6;
+}
+ 
+.placeholder-card{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:20px;
+}
+ 
+.placeholder-card-title{
+ font-size:14px;
+ font-weight:600;
+ margin-bottom:6px;
+}
+ 
+.placeholder-card-sub{
+ font-size:12px;
+ color:var(--muted);
+ line-height:1.5;
+}
+</style>
+</head>
+ 
+<body>
+ 
+<div class="phone" id="app">
+ 
+ <div class="status-bar">
+   <span class="status-time">9:41</span>
+   <div style="display:flex;gap:4px;align-items:center;">
+     <i class="ti ti-wifi" style="font-size:12px"></i>
+     <i class="ti ti-battery-2" style="font-size:12px"></i>
+   </div>
+ </div>
+ 
+ <!-- ══ SHOPS PAGE ══ -->
+ <div id="shopsPage" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+ 
+   <div class="header">
+     <div class="header-top">
+ 
+       <div>
+         <div class="greeting">Near you · NYC</div>
+         <div class="title">Repair<br>Shops</div>
+       </div>
+ 
+       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+         <div class="avatar">AJ</div>
+ 
+         <!-- Interactive location badge -->
+         <div class="loc-badge" id="locBadge" onclick="toggleLocDropdown(event)">
+           <i class="ti ti-map-pin" style="font-size:11px"></i>
+           <span id="locLabel">Lower Manhattan</span>
+           <i class="ti ti-chevron-down" style="font-size:10px;color:var(--accent)"></i>
+ 
+           <div class="loc-dropdown" id="locDropdown">
+             <div class="loc-option selected" onclick="selectLocation(event,'Lower Manhattan')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Lower Manhattan
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Midtown')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Midtown
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Upper East Side')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Upper East Side
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Brooklyn')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Brooklyn
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Queens')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Queens
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'The Bronx')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>The Bronx
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Harlem')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Harlem
+             </div>
+             <div class="loc-option" onclick="selectLocation(event,'Astoria')">
+               <i class="ti ti-map-pin" style="font-size:12px"></i>Astoria
+             </div>
+           </div>
+         </div>
+       </div>
+ 
+     </div>
+   </div>
+ 
+   <div class="search-wrap">
+     <div class="search-box">
+       <i class="ti ti-search" style="font-size:16px"></i>
+       <input type="text" placeholder="Store name or service…" id="searchInput" oninput="filterStores()">
+       <!-- Filter toggle button -->
+       <button class="filter-btn" aria-label="Filters" onclick="toggleFilters()">
+         <i class="ti ti-adjustments-horizontal" style="font-size:14px"></i>
+       </button>
+     </div>
+   </div>
+ 
+   <!-- Collapsible filter panel -->
+   <div class="filter-panel" id="filterPanel">
+     <div class="sort-row">
+       <button class="chip active" onclick="setSort('rating',this)">⭐ Top Rated</button>
+       <button class="chip" onclick="setSort('distance',this)">📍 Nearest</button>
+       <button class="chip" onclick="setSort('reviews',this)">💬 Most Reviewed</button>
+     </div>
+     <div class="filter-row">
+       <button class="ftag on" onclick="toggleFilter('all',this)">All</button>
+       <button class="ftag" onclick="toggleFilter('Phone',this)">Phone</button>
+       <button class="ftag" onclick="toggleFilter('Laptop',this)">Laptop</button>
+       <button class="ftag" onclick="toggleFilter('Tablet',this)">Tablet</button>
+       <button class="ftag" onclick="toggleFilter('open',this)">Open Now</button>
+     </div>
+   </div>
+ 
+   <!-- Scrollable list area -->
+   <div class="scroll-area" id="scrollArea">
+     <div id="loading">
+       <div class="skeleton"><div class="sk-line mid"></div><div class="sk-line short"></div><div class="sk-line"></div></div>
+       <div class="skeleton"><div class="sk-line"></div><div class="sk-line short"></div><div class="sk-line mid"></div></div>
+     </div>
+ 
+     <div id="storeList" style="display:none">
+       <div class="section-label" id="resultCount"></div>
+       <div class="list" id="cardsContainer"></div>
+     </div>
+ 
+     <div id="emptyState" class="empty-state" style="display:none">
+       <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+       <div class="empty-title">No shops found</div>
+       <p style="font-size:13px">Try adjusting your search or filters.</p>
+     </div>
+   </div>
+ 
+ </div>
+ 
+ <!-- ══ HOME PAGE ══ -->
+ <div class="page-panel" id="homePage">
+   <div>
+     <div class="page-title">Home</div>
+     <div class="page-sub">Welcome back! Find repair shops near you, track your repairs, and more.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">📱 Recent Repair</div>
+     <div class="placeholder-card-sub">Screen replacement at uBreakiFix — completed 2 days ago.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">⭐ Rate Your Last Visit</div>
+     <div class="placeholder-card-sub">How was your experience at CPR Cell Phone Repair NYC?</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">💡 Tip of the Day</div>
+     <div class="placeholder-card-sub">Tempered glass screen protectors can prevent up to 90% of screen breaks.</div>
+   </div>
+ </div>
+ 
+ <!-- ══ REPAIR PAGE ══ -->
+ <div class="page-panel" id="repairPage">
+   <div>
+     <div class="page-title">Book a Repair</div>
+     <div class="page-sub">Choose a device type and we'll match you with the best nearby shops.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">📱 Smartphone</div>
+     <div class="placeholder-card-sub">Screen, battery, charging port, camera, water damage and more.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">💻 Laptop / MacBook</div>
+     <div class="placeholder-card-sub">Keyboard, screen, SSD upgrade, hinge, fan replacement.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">📟 Tablet / iPad</div>
+     <div class="placeholder-card-sub">Screen, digitizer, battery replacement.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">⌚ Smartwatch</div>
+     <div class="placeholder-card-sub">Screen, band, battery, sensor repairs.</div>
+   </div>
+ </div>
+ 
+ <!-- ══ PROFILE PAGE ══ -->
+ <div class="page-panel" id="profilePage">
+   <div style="display:flex;align-items:center;gap:14px;">
+     <div class="avatar" style="width:54px;height:54px;font-size:20px;flex-shrink:0;">AJ</div>
+     <div>
+       <div class="page-title" style="margin-bottom:2px;">Alex Johnson</div>
+       <div class="page-sub">alex.johnson@email.com</div>
+     </div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">🔔 Notifications</div>
+     <div class="placeholder-card-sub">Manage repair status alerts and shop promotions.</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">📍 Saved Location</div>
+     <div class="placeholder-card-sub" id="profileLocLabel">Lower Manhattan</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">❤️ Saved Shops</div>
+     <div class="placeholder-card-sub">uBreakiFix by Asurion, CPR Cell Phone Repair NYC</div>
+   </div>
+   <div class="placeholder-card">
+     <div class="placeholder-card-title">⚙️ Settings</div>
+     <div class="placeholder-card-sub">Privacy, account, and app preferences.</div>
+   </div>
+ </div>
+ 
+ <!-- ══ NAVBAR ══ -->
+ <div class="navbar">
+   <div class="nav-item" id="nav-home" onclick="switchPage('home')">
+     <i class="ti ti-home" style="font-size:20px"></i>
+     <span>Home</span>
+     <div class="nav-dot"></div>
+   </div>
+   <div class="nav-item active" id="nav-shops" onclick="switchPage('shops')">
+     <i class="ti ti-map" style="font-size:20px"></i>
+     <span>Shops</span>
+     <div class="nav-dot"></div>
+   </div>
+   <div class="nav-item" id="nav-repair" onclick="switchPage('repair')">
+     <i class="ti ti-tool" style="font-size:20px"></i>
+     <span>Repair</span>
+     <div class="nav-dot"></div>
+   </div>
+   <div class="nav-item" id="nav-profile" onclick="switchPage('profile')">
+     <i class="ti ti-user" style="font-size:20px"></i>
+     <span>Profile</span>
+     <div class="nav-dot"></div>
+   </div>
+ </div>
+ 
+</div>
+ 
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+ <div class="detail-sheet" id="detailSheet">
+   <div class="drag-handle"></div>
+   <button class="detail-close" onclick="closeDetail()">
+     <i class="ti ti-x" style="font-size:14px"></i>
+   </button>
+   <div id="detailContent"></div>
+ </div>
+</div>
+ 
+<script>
+/* ── PAGE NAVIGATION ── */
+function switchPage(page){
+ document.getElementById('shopsPage').style.display   = page==='shops'   ? 'flex' : 'none';
+ document.getElementById('homePage').classList.toggle  ('active', page==='home');
+ document.getElementById('repairPage').classList.toggle('active', page==='repair');
+ document.getElementById('profilePage').classList.toggle('active',page==='profile');
+ 
+ ['home','shops','repair','profile'].forEach(p=>{
+   document.getElementById('nav-'+p).classList.toggle('active', p===page);
+ });
+}
+ 
+/* ── LOCATION DROPDOWN ── */
+function toggleLocDropdown(e){
+ e.stopPropagation();
+ document.getElementById('locDropdown').classList.toggle('open');
+}
+ 
+function selectLocation(e, name){
+ e.stopPropagation();
+ document.getElementById('locLabel').textContent = name;
+ document.getElementById('profileLocLabel').textContent = name;
+ document.querySelectorAll('.loc-option').forEach(o=>o.classList.remove('selected'));
+ e.currentTarget.classList.add('selected');
+ document.getElementById('locDropdown').classList.remove('open');
+}
+ 
+document.addEventListener('click', function(e){
+ if(!document.getElementById('locBadge').contains(e.target)){
+   document.getElementById('locDropdown').classList.remove('open');
+ }
+});
+ 
+/* ── FILTER TOGGLE ── */
+let filtersVisible = false;
+function toggleFilters(){
+ filtersVisible = !filtersVisible;
+ document.getElementById('filterPanel').classList.toggle('open', filtersVisible);
+}
+ 
+/* ── STORES DATA ── */
+const stores = [
+ {
+   id:1,
+   name:"uBreakiFix by Asurion",
+   topRated:true,
+   open:true,
+   rating:4.8,
+   reviews:1247,
+   distance:0.3,
+   address:"100 William St, New York, NY 10038",
+   website:"https://www.ubreakifix.com/",
+   services:["Phone Repair","Laptop Repair","Screen Replacement","Battery"],
+   ratingBreakdown:[60,25,10,3,2],
+   clientReviews:[
+     {author:"Sarah M.",stars:5,text:"Screen replaced in 45 mins, good as new!"},
+     {author:"James K.",stars:5,text:"Fair pricing, very professional staff."}
+   ]
+ },
+ {
+   id:2,
+   name:"CPR Cell Phone Repair NYC",
+   topRated:true,
+   open:true,
+   rating:4.7,
+   reviews:892,
+   distance:0.6,
+   address:"217 Broadway, New York, NY 10007",
+   website:"https://www.cellphonerepair.com/",
+   services:["Phone Repair","Tablet Repair","Water Damage"],
+   ratingBreakdown:[55,28,12,3,2],
+   clientReviews:[
+     {author:"Marcus T.",stars:5,text:"Saved my water-damaged iPhone!"},
+     {author:"Priya N.",stars:4,text:"Fast turnaround and fair prices."}
+   ]
+ },
+ {
+   id:3,
+   name:"iFixit NYC",
+   topRated:false,
+   open:true,
+   rating:4.6,
+   reviews:634,
+   distance:0.9,
+   address:"45 Fulton St, New York, NY 10038",
+   website:"https://www.ifixit.com/",
+   services:["Phone Repair","Laptop Repair","Tablet Repair","Battery"],
+   ratingBreakdown:[50,30,14,4,2],
+   clientReviews:[
+     {author:"Tom R.",stars:5,text:"Fixed my cracked iPad screen same day!"},
+     {author:"Lisa W.",stars:4,text:"Great service, slightly pricey but worth it."}
+   ]
+ },
+ {
+   id:4,
+   name:"Tekserve",
+   topRated:false,
+   open:false,
+   rating:4.5,
+   reviews:521,
+   distance:1.2,
+   address:"119 W 23rd St, New York, NY 10011",
+   website:"https://www.tekserve.com/",
+   services:["Laptop Repair","Mac Repair","Data Recovery"],
+   ratingBreakdown:[48,32,14,4,2],
+   clientReviews:[
+     {author:"Anna B.",stars:5,text:"Best Mac repair in the city, hands down."},
+     {author:"Derek S.",stars:4,text:"Knowledgeable staff, recovered all my files."}
+   ]
+ },
+ {
+   id:5,
+   name:"NY Phone Repair",
+   topRated:false,
+   open:true,
+   rating:4.4,
+   reviews:408,
+   distance:1.4,
+   address:"280 Broadway, New York, NY 10007",
+   website:"https://nyphonerepair.com/",
+   services:["Phone Repair","Screen Replacement","Battery","Charging Port"],
+   ratingBreakdown:[44,35,15,4,2],
+   clientReviews:[
+     {author:"Kevin L.",stars:4,text:"Quick screen fix for a great price!"},
+     {author:"Maria C.",stars:5,text:"Friendly staff, very transparent pricing."}
+   ]
+ },
+ {
+   id:6,
+   name:"Mobile Kangaroo",
+   topRated:false,
+   open:true,
+   rating:4.3,
+   reviews:319,
+   distance:1.7,
+   address:"401 Park Ave S, New York, NY 10016",
+   website:"https://www.mobilekangaroo.com/",
+   services:["Phone Repair","Tablet Repair","Screen Replacement","Battery"],
+   ratingBreakdown:[42,33,18,5,2],
+   clientReviews:[
+     {author:"Sophie H.",stars:4,text:"Good prices, done within the hour."},
+     {author:"Ryan T.",stars:4,text:"Solid repair, new screen looks perfect."}
+   ]
+ },
+ {
+   id:7,
+   name:"Just Breakfix",
+   topRated:false,
+   open:false,
+   rating:4.2,
+   reviews:256,
+   distance:1.9,
+   address:"56 Maiden Ln, New York, NY 10038",
+   website:"https://justbreakfix.com/",
+   services:["Phone Repair","Laptop Repair","Water Damage","Battery"],
+   ratingBreakdown:[40,34,18,5,3],
+   clientReviews:[
+     {author:"Noah P.",stars:4,text:"Fixed water damage in a few hours."},
+     {author:"Emma D.",stars:4,text:"Honest diagnosis, no hidden fees."}
+   ]
+ },
+ {
+   id:8,
+   name:"SquareTrade Repair Center",
+   topRated:false,
+   open:true,
+   rating:4.1,
+   reviews:182,
+   distance:2.3,
+   address:"11 Wall St, New York, NY 10005",
+   website:"https://www.squaretrade.com/",
+   services:["Phone Repair","Tablet Repair","Laptop Repair","Screen Replacement"],
+   ratingBreakdown:[38,36,19,5,2],
+   clientReviews:[
+     {author:"Lena G.",stars:4,text:"Insurance claim handled smoothly."},
+     {author:"Chris A.",stars:4,text:"Repaired my Galaxy in under 2 hours."}
+   ]
+ },
+ {
+   id:9,
+   name:"Manhattan Phone Repair",
+   topRated:false,
+   open:true,
+   rating:4.0,
+   reviews:147,
+   distance:2.6,
+   address:"67 Nassau St, New York, NY 10038",
+   website:"https://manhattanphonerepair.com/",
+   services:["Phone Repair","Screen Replacement","Battery","Unlocking"],
+   ratingBreakdown:[36,35,20,6,3],
+   clientReviews:[
+     {author:"Jake F.",stars:4,text:"In and out in under an hour, great!"},
+     {author:"Nina S.",stars:4,text:"Very affordable, quality work."}
+   ]
+ },
+ {
+   id:10,
+   name:"Crosstown Computers",
+   topRated:false,
+   open:false,
+   rating:3.9,
+   reviews:98,
+   distance:3.1,
+   address:"332 W 44th St, New York, NY 10036",
+   website:"https://crosstowncomputers.com/",
+   services:["Laptop Repair","Mac Repair","Virus Removal","Data Recovery"],
+   ratingBreakdown:[33,34,22,7,4],
+   clientReviews:[
+     {author:"Paul M.",stars:4,text:"Removed a nasty virus, runs like new."},
+     {author:"Grace L.",stars:3,text:"Took a few days but got the job done."}
+   ]
+ }
+];
+ 
+let currentSort='rating';
+let activeFilters=new Set(['all']);
+ 
+function stars(r){
+ let s='';
+ for(let i=1;i<=5;i++){
+   if(i<=Math.floor(r)) s+='<span class="star full">★</span>';
+   else if(i-r<1&&i-r>0) s+='<span class="star half">★</span>';
+   else s+='<span class="star empty">★</span>';
+ }
+ return s;
+}
+ 
+function renderCard(store){
+ const div=document.createElement('div');
+ div.className='card'+(store.topRated?' top':'');
+ div.onclick=()=>openDetail(store);
+ div.innerHTML=`
+   <div class="card-head">
+     <div class="store-name">
+       <a href="${store.website}" target="_blank" onclick="event.stopPropagation()">
+         ${store.name}
+       </a>
+     </div>
+     <div class="badges">
+       ${store.topRated?'<span class="badge-top">Top Rated</span>':''}
+       <span class="badge-open ${store.open?'open':'closed'}">
+         ${store.open?'Open':'Closed'}
+       </span>
+     </div>
+   </div>
+   <div class="stars-row">
+     <div class="stars">${stars(store.rating)}</div>
+     <span class="rating-num">${store.rating}</span>
+     <span class="review-count">(${store.reviews.toLocaleString()} reviews)</span>
+   </div>
+   <div class="addr-row">
+     <i class="ti ti-map-pin" style="font-size:11px"></i>
+     <span class="addr-text">${store.address}</span>
+     <span class="dist-badge">${store.distance} mi</span>
+   </div>
+   <div class="tags">
+     ${store.services.map(s=>`<span class="tag">${s}</span>`).join('')}
+   </div>
+ `;
+ return div;
+}
+ 
+function renderList(list){
+ const c=document.getElementById('cardsContainer');
+ c.innerHTML='';
+ document.getElementById('resultCount').textContent=
+   `${list.length} shop${list.length!==1?'s':''} found`;
+ if(list.length===0){
+   document.getElementById('storeList').style.display='none';
+   document.getElementById('emptyState').style.display='block';
+   return;
+ }
+ document.getElementById('storeList').style.display='block';
+ document.getElementById('emptyState').style.display='none';
+ list.forEach(store=>{
+   c.appendChild(renderCard(store));
+ });
+}
+ 
+function getFiltered(){
+ const q=document.getElementById('searchInput').value.toLowerCase();
+ let list=[...stores];
+ if(!activeFilters.has('all')){
+   list=list.filter(s=>{
+     if(activeFilters.has('open')&&!s.open) return false;
+     const devFilters=[...activeFilters].filter(f=>f!=='open');
+     if(
+       devFilters.length &&
+       !devFilters.some(f=>
+         s.services.some(sv=>sv.toLowerCase().includes(f.toLowerCase()))
+       )
+     ) return false;
+     return true;
+   });
+ }
+ if(q){
+   list=list.filter(s=>
+     s.name.toLowerCase().includes(q) ||
+     s.services.some(sv=>sv.toLowerCase().includes(q))
+   );
+ }
+ if(currentSort==='rating'){
+   list.sort((a,b)=>b.rating-a.rating);
+ } else if(currentSort==='distance'){
+   list.sort((a,b)=>a.distance-b.distance);
+ } else {
+   list.sort((a,b)=>b.reviews-a.reviews);
+ }
+ return list;
+}
+ 
+function filterStores(){
+ renderList(getFiltered());
+}
+ 
+function setSort(type,el){
+ currentSort=type;
+ document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+ el.classList.add('active');
+ filterStores();
+}
+ 
+function toggleFilter(val,el){
+ if(val==='all'){
+   activeFilters=new Set(['all']);
+   document.querySelectorAll('.ftag').forEach(f=>f.classList.remove('on'));
+   el.classList.add('on');
+ } else {
+   activeFilters.delete('all');
+   document.querySelector('.ftag').classList.remove('on');
+   if(activeFilters.has(val)){
+     activeFilters.delete(val);
+     el.classList.remove('on');
+   } else {
+     activeFilters.add(val);
+     el.classList.add('on');
+   }
+   if(activeFilters.size===0){
+     activeFilters.add('all');
+     document.querySelector('.ftag').classList.add('on');
+   }
+ }
+ filterStores();
+}
+ 
+function openDetail(store){
+ const barsHTML=[5,4,3,2,1].map((n,i)=>`
+   <div class="bar-row">
+     <span class="bar-label">${n}</span>
+     <div class="bar-track">
+       <div class="bar-fill" style="width:${store.ratingBreakdown[i]}%"></div>
+     </div>
+     <span style="font-size:10px;color:var(--muted);width:28px;text-align:right">
+       ${store.ratingBreakdown[i]}%
+     </span>
+   </div>
+ `).join('');
+ 
+ const revsHTML=store.clientReviews.map(r=>`
+   <div class="review-card">
+     <div class="rev-head">
+       <span class="rev-author">${r.author}</span>
+       <div>${stars(r.stars)}</div>
+     </div>
+     <p class="rev-text">${r.text}</p>
+   </div>
+ `).join('');
+ 
+ document.getElementById('detailContent').innerHTML=`
+   <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:4px;">
+     <div style="flex:1">
+       <div class="detail-title">${store.name}</div>
+       <div class="detail-addr">
+         <i class="ti ti-map-pin" style="font-size:11px"></i>
+         ${store.address}
+       </div>
+     </div>
+     <span class="badge-open ${store.open?'open':'closed'}">
+       ${store.open?'Open Now':'Closed'}
+     </span>
+   </div>
+   <div class="detail-stars">
+     <div class="big-rating">${store.rating}</div>
+     <div class="rating-bars">${barsHTML}</div>
+   </div>
+   <div class="action-row">
+     <button class="act-btn primary">
+       <i class="ti ti-map-2"></i>
+       Directions
+     </button>
+     <button class="act-btn secondary">
+       <i class="ti ti-phone"></i>
+       Call
+     </button>
+   </div>
+   <div class="services-title">Services</div>
+   <div class="services-list">
+     ${store.services.map(s=>`<span class="svc-tag">${s}</span>`).join('')}
+   </div>
+   <div class="reviews-title">
+     Customer Reviews (${store.reviews.toLocaleString()})
+   </div>
+   ${revsHTML}
+ `;
+ 
+ const overlay=document.getElementById('detailOverlay');
+ overlay.style.display='flex';
+}
+ 
+function closeDetail(e){
+ if(
+   e &&
+   e.target!==document.getElementById('detailOverlay') &&
+   !e.target.classList.contains('detail-close')
+ ) return;
+ document.getElementById('detailOverlay').style.display='none';
+}
+ 
+setTimeout(()=>{
+ document.getElementById('loading').style.display='none';
+ renderList(getFiltered());
+},1200);
+</script>
+ 
+</body>
+</html>
+
+
