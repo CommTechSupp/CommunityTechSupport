@@ -1,1 +1,12 @@
+name: Deno Lint
 
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+      - name: Run deno lint
+        run: deno lint --rules=all *.jsx
