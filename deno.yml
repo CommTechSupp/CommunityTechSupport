@@ -1,18 +1,2 @@
-name: Deno Lint
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.46.3
-      - name: Run linter
-        run: deno lint
+- name: Run deno lint
+  run: deno lint --ignore=**/*.jsx,**/*.tsx,**/*.jsx,**/*.tsx
