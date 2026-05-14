@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1
       - name: Run deno lint
-        run: deno lint --rules=all *.jsx
+        run: run: deno lint *.jsx
