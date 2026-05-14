@@ -1,8 +1,8 @@
 {
   "lint": {
+    "exclude": ["App.js", "SharedComponents.js", "DashboardScreen.js", "HiringScreen.js", "TutorialsScreen.js"],
     "rules": {
-      "tags": ["recommended"],
-      "exclude": ["App.js", "SharedComponents.js", "DashboardScreen.js", "HiringScreen.js", "TutorialsScreen.js"]
+      "tags": ["recommended"]
     }
   }
 }
