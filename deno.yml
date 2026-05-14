@@ -1,2 +1,2 @@
 - name: Run deno lint
-  run: deno lint --ignore=**/*.jsx,**/*.tsx,**/*.jsx,**/*.tsx
+  run: deno lint --ignore=**/*.js,**/*.tsx,**/*.jsx,**/*.tsx
