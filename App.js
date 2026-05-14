@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar style="light" />
+      <StatusBar style="light-content" />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           // Tab bar icon config
