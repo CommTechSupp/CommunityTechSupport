@@ -215,4 +215,3 @@ const styles = StyleSheet.create({
   recentTitle: { fontSize: 13, fontWeight: FONT.semibold, color: COLORS.text },
   recentDur: { fontSize: 12, color: COLORS.textSub },
 });
-import { useTheme } from '../theme/ThemeContext';
