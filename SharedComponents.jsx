@@ -1,7 +1,7 @@
 // ─── Shared UI Components ─────────────────────────────────────────────────────
 // Reusable building blocks. Import from any screen.
 
-import React from 'react';
+import _React from 'react';
 import {
   View,
   Text,
